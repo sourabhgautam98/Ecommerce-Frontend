@@ -11,13 +11,13 @@ const ManageProduct = () => {
     try {
       setLoading(true);
       setError('');
-      const res = await axios.get('http://localhost:3000/api/products');
-      
-      // Handle the new API response structure
+      const res = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}/products`);
+
+    
       if (res.data.products) {
         setProducts(res.data.products);
       } else {
-        // Fallback for old API structure
+       
         setProducts(res.data);
       }
    
@@ -33,19 +33,20 @@ const ManageProduct = () => {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
     
     try {
-      const res = await axios.delete(`http://localhost:3000/api/products/${id}`);
+    const res = await axios.delete(`${import.meta.env.VITE_APP_BASE_URL}/products/${id}`);
+
      
       
-      // Update local state by removing deleted product
+   
       setProducts(products.filter(p => p._id !== id));
       
-      // Show success message
+   
       alert(res.data.message || "Product deleted successfully!");
       
     } catch (err) {
       console.error("❌ Failed to delete product:", err);
       
-      // Show specific error message
+      
       const errorMessage = err.response?.data?.error || "Delete failed. Please try again.";
       alert(errorMessage);
     }
@@ -53,22 +54,21 @@ const ManageProduct = () => {
 
   // Function to get full image URL
   const getImageUrl = (photoUrl) => {
-    if (!photoUrl) return '/placeholder-image.jpg'; // Fallback image
-    
-    // If it's already a full URL, return as is
+    if (!photoUrl) return '/placeholder-image.jpg';
+   
     if (photoUrl.startsWith('http')) {
       return photoUrl;
     }
-    
-    // If it's a relative path, prepend the server URL
-    return `http://localhost:3000${photoUrl}`;
+  
+   return `${import.meta.env.VITE_SERVER_BASE_URL}${photoUrl}`;
+
   };
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
-  // Loading state
+  
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -132,7 +132,7 @@ const ManageProduct = () => {
                   alt={product.name}
                   className="w-full h-48 object-cover rounded-lg"
                   onError={(e) => {
-                    e.target.src = '/placeholder-image.jpg'; // Fallback if image fails to load
+                    e.target.src = '/placeholder-image.jpg'; 
                   }}
                 />
                 {/* Price Badge */}

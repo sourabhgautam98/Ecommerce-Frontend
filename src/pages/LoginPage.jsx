@@ -14,7 +14,7 @@ const LoginPage = () => {
 
   const { login  } = useAuth();
   const navigate = useNavigate();
-  // const location = useLocation();
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +23,7 @@ const LoginPage = () => {
       [name]: value,
     }));
 
-    // Clear error when user types
+  
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -64,7 +64,7 @@ const LoginPage = () => {
     const from = "/ManageProduct";
     navigate(from, { replace: true });
   } else {
-    setApiError(result); // result contains the error message
+    setApiError(result); 
   }
   
   setLoading(false);
@@ -138,7 +138,7 @@ const LoginPage = () => {
                 type="button"
                 className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
                 onClick={() => setShowPassword(!showPassword)}
-                tabIndex="-1" // Prevent button from being tabbed
+                tabIndex="-1" 
               >
                 {showPassword ? (
                   <svg

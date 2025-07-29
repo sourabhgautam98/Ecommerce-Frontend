@@ -5,7 +5,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AddProduct from "./pages/AddProduct";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar";
 import AdminRegister from "./pages/AdminRegister";
 import ManageProduct from "./pages/ManageProduct";
 import UserOrder from "./pages/UserOrder";

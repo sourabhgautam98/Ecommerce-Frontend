@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext'; // Adjust the path accordingly
+import { useAuth } from '../contexts/AuthContext'; 
 
 const ProductCard = ({ product }) => {
   const [imageError, setImageError] = useState(false);

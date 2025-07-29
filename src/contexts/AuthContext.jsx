@@ -103,10 +103,9 @@ useEffect(() => {
     setState(prev => ({
       ...prev,
       loading: false,
-      // Don't set isLoggedIn to false here - keep previous auth state
-      error: null, // Don't set persistent error
+      error: null, 
     }));
-    // Return the error message instead
+   
     return error.response?.data?.message || 'Login failed';
   }
 };

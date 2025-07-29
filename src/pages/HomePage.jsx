@@ -5,26 +5,27 @@ import ProductCard from "../components/ProductCard";
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        setError('');
-        const res = await axios.get("http://localhost:3000/api/products");
-        
-        // Handle the new API response structure
+        setError("");
+        const res = await axios.get(
+          `${import.meta.env.VITE_APP_BASE_URL}/products`
+        );
+
+       
         if (res.data.products) {
           setProducts(res.data.products);
         } else {
-          // Fallback for old API structure
+         
           setProducts(res.data);
         }
-        
       } catch (err) {
         console.error("❌ Failed to fetch products:", err);
-        setError(err.response?.data?.error || 'Failed to load products');
+        setError(err.response?.data?.error || "Failed to load products");
       } finally {
         setLoading(false);
       }
@@ -33,15 +34,17 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
-  // Retry function for error handling
+ 
   const handleRetry = () => {
-    setError('');
+    setError("");
     setLoading(true);
-    // Re-fetch products
+   
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/products");
-        
+        const res = await axios.get(
+          `${import.meta.env.VITE_APP_BASE_URL}/products`
+        );
+
         if (res.data.products) {
           setProducts(res.data.products);
         } else {
@@ -49,7 +52,7 @@ const HomePage = () => {
         }
       } catch (err) {
         console.error("❌ Failed to fetch products:", err);
-        setError(err.response?.data?.error || 'Failed to load products');
+        setError(err.response?.data?.error || "Failed to load products");
       } finally {
         setLoading(false);
       }
@@ -66,14 +69,12 @@ const HomePage = () => {
           alt="Mobile Phones Banner"
           className="w-full h-full object-cover"
           onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex'; // Show fallback div
+            e.target.style.display = "none";
+            e.target.nextSibling.style.display = "flex"; 
           }}
         />
         {/* Fallback if image doesn't load */}
-        <div 
-          className="w-full h-full bg-gradient-to-r from-blue-600 to-blue-800 hidden items-center justify-center"
-        >
+        <div className="w-full h-full bg-gradient-to-r from-blue-600 to-blue-800 hidden items-center justify-center">
           <div className="text-center text-white">
             <div className="text-6xl mb-4">📱</div>
             <h2 className="text-3xl font-bold">Mobile Store</h2>
@@ -110,7 +111,7 @@ const HomePage = () => {
               Oops! Something went wrong
             </h3>
             <p className="text-gray-600 mb-6">{error}</p>
-            <button 
+            <button
               onClick={handleRetry}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
             >
@@ -129,7 +130,7 @@ const HomePage = () => {
             <p className="text-gray-500 mb-6">
               Check back later for the latest mobile phones and deals.
             </p>
-            <button 
+            <button
               onClick={handleRetry}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
             >
