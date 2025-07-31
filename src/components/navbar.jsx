@@ -95,20 +95,20 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-4 items-center">
-            <NavLink to="/" className={navLinkClass}>Home</NavLink>
 
             {/* Admin Links */}
             {isLoggedIn && isAdmin() && (
               <>
                 <NavLink to="/ManageProduct" className={navLinkClass}>Manage Products</NavLink>
                 <NavLink to="/AddProduct" className={navLinkClass}>Add Product</NavLink>
-                <NavLink to="/AdminOrder" className={navLinkClass}>Orders</NavLink>
+                <NavLink to="/AdminOrder" className={navLinkClass}>All Orders</NavLink>
               </>
             )}
 
             {/* User Links */}
             {isLoggedIn && isUser() && !isAdmin() && (
               <>
+              <NavLink to="/" className={navLinkClass}>Home</NavLink>
                 <NavLink to="/CartPage" className={navLinkClass}>Cart</NavLink>
                 <NavLink to="/UserOrder" className={navLinkClass}>My Orders</NavLink>
               </>
@@ -116,7 +116,7 @@ const Navbar = () => {
 
             {/* Auth Links */}
             {!isLoggedIn ? (
-              <>
+              <> 
                 <NavLink to="/LoginPage" className={navLinkClass}>Login</NavLink>
                 <NavLink to="/RegisterPage" className={navLinkClass}>Register</NavLink>
               </>

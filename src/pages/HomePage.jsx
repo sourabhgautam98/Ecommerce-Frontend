@@ -63,7 +63,7 @@ const HomePage = () => {
   return (
     <div className="bg-gray-100 min-h-screen">
       {/* Top Banner */}
-      <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden">
+      <div className="relative w-full h-64 md:h-80 lg:h-120 overflow-hidden">
         <img
           src="/images/photo1.jpg"
           alt="Mobile Phones Banner"

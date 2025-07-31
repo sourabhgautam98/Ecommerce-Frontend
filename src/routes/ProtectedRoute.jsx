@@ -22,12 +22,11 @@ export const UserRoute = () => {
 };
 
 export const AuthRoute = () => {
-  const { isLoggedIn } = useAuth();
-  
+  const { isLoggedIn, isAdmin } = useAuth();
+
   if (isLoggedIn) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={isAdmin() ? "/ManageProduct" : "/"} replace />;
   }
-  
   return <Outlet />;
 };
 

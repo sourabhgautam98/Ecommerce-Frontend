@@ -42,73 +42,67 @@ const AuthProvider = ({ children }) => {
     }
   }, []);
 
-
-useEffect(() => {
-  const checkAuthStatus = async () => {
-    const token = Cookies.get("token");
-    if (token) {
-      try {
-        const userData = await fetchUser();
-        setState({
-          isLoggedIn: true,
-          user: userData,
-          loading: false,
-          error: null,
-        });
-      } catch (error) {
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const token = Cookies.get("token");
+      if (token) {
+        try {
+          const userData = await fetchUser();
+          setState({
+            isLoggedIn: true,
+            user: userData,
+            loading: false,
+            error: null,
+          });
+        } catch (error) {
+          setState({
+            isLoggedIn: false,
+            user: null,
+            loading: false,
+            error: error.message,
+          });
+        }
+      } else {
         setState({
           isLoggedIn: false,
           user: null,
           loading: false,
-          error: error.message,
+          error: null,
         });
       }
-    } else {
+    };
+
+    checkAuthStatus();
+  }, [fetchUser]);
+
+  const login = async (credentials) => {
+    try {
+      setState((prev) => ({ ...prev, loading: true, error: null }));
+
+      const { token, _id, name, email, role } = await authAPI.login(credentials);
+      const userData = { _id, name, email, role };
+      
+      Cookies.set("token", token, { sameSite: 'strict' });
+      Cookies.set("userData", JSON.stringify(userData), { sameSite: 'strict' });
+      
       setState({
-        isLoggedIn: false,
-        user: null,
+        isLoggedIn: true,
+        user: userData,
         loading: false,
         error: null,
       });
+
+      return true;
+    } catch (error) {
+      console.error("Login failed:", error);
+      setState(prev => ({
+        ...prev,
+        loading: false,
+        error: error.response?.data?.message || 'Login failed',
+      }));
+      return false;
     }
   };
-
-  checkAuthStatus();
-}, [fetchUser]);
-
-  const login = async (credentials) => {
-  try {
-    setState((prev) => ({ ...prev, loading: true, error: null }));
-
-    const { token, _id, name, email, role } = await authAPI.login(credentials);
-    const userData = {
-      _id,
-      name,
-      email,
-      role,
-    }
-    Cookies.set("token", token, { sameSite: 'strict' });
-    Cookies.set("userData", JSON.stringify(userData), { sameSite: 'strict' });
-    
-    setState({
-      isLoggedIn: true,
-      user: userData,
-      loading: false,
-      error: null,
-    });
-
-    return true;
-  } catch (error) {
-    console.error("Login failed:", error);
-    setState(prev => ({
-      ...prev,
-      loading: false,
-      error: null, 
-    }));
-   
-    return error.response?.data?.message || 'Login failed';
-  }
-};
 
   const logout = () => {
     Cookies.remove("token");
@@ -122,9 +116,7 @@ useEffect(() => {
     return true;
   };
 
-  // Enhanced role checking functions
   const hasRole = (role) => state.user?.role === role;
-  const hasAnyRole = (roles) => roles.includes(state.user?.role);
   const isAdmin = () => hasRole("admin");
   const isUser = () => hasRole("user") || isAdmin();
 
@@ -136,7 +128,6 @@ useEffect(() => {
         logout,
         getToken: () => Cookies.get("token"),
         hasRole,
-        hasAnyRole,
         isAdmin,
         isUser,
         fetchUser,
@@ -156,4 +147,4 @@ const useAuth = () => {
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
-export { AuthProvider, useAuth, AuthContext };
+export { AuthProvider, useAuth };
