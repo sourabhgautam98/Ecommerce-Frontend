@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
@@ -7,6 +8,7 @@ const CartPage = () => {
   const { user, isLoggedIn, isUser, getToken } = useAuth();
   const { getCurrentUserCart, removeFromCart, updateQuantity, clearCart } =
     useCart();
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const cartItems = isLoggedIn ? getCurrentUserCart(user._id) : [];
 
@@ -18,11 +20,20 @@ const CartPage = () => {
   const total = subtotal + shipping;
 
   const handleCheckout = async () => {
+    if (isCheckingOut) return; // Prevent multiple clicks
+    
+    setIsCheckingOut(true);
     try {
       const token = getToken();
       if (!token) {
         alert("Please log in first!");
         navigate("/LoginPage");
+        return;
+      }
+
+      // Check if cart is empty
+      if (cartItems.length === 0) {
+        alert("Your cart is empty!");
         return;
       }
 
@@ -48,13 +59,17 @@ const CartPage = () => {
         throw new Error("Some orders failed to process");
       }
 
+      // Clear cart only after successful order creation
       clearCart(user._id);
       navigate("/UserOrder");
     } catch (error) {
       console.error("Checkout failed:", error);
       alert("Checkout failed. Please try again.");
+    } finally {
+      setIsCheckingOut(false);
     }
   };
+
   if (!isLoggedIn || !isUser()) {
     return (
       <div className="bg-gray-100 min-h-screen py-12">
@@ -65,7 +80,7 @@ const CartPage = () => {
               Please login to view your cart
             </h2>
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/LoginPage")}
               className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
             >
               Login Now
@@ -133,10 +148,13 @@ const CartPage = () => {
                             updateQuantity(
                               user._id,
                               item._id,
-                              item.quantity - 1
+                              Math.max(1, item.quantity - 1)
                             )
                           }
-                          className="w-8 h-8 bg-gray-200 rounded"
+                          disabled={item.quantity <= 1}
+                          className={`w-8 h-8 rounded ${
+                            item.quantity <= 1 ? "bg-gray-100" : "bg-gray-200 hover:bg-gray-300"
+                          }`}
                         >
                           -
                         </button>
@@ -149,7 +167,7 @@ const CartPage = () => {
                               item.quantity + 1
                             )
                           }
-                          className="w-8 h-8 bg-gray-200 rounded"
+                          className="w-8 h-8 bg-gray-200 rounded hover:bg-gray-300"
                         >
                           +
                         </button>
@@ -185,9 +203,14 @@ const CartPage = () => {
                 </div>
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700"
+                  disabled={isCheckingOut || cartItems.length === 0}
+                  className={`w-full ${
+                    isCheckingOut || cartItems.length === 0
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700"
+                  } text-white py-3 rounded-lg font-bold`}
                 >
-                  Proceed to Checkout
+                  {isCheckingOut ? "Processing..." : "Proceed to Checkout"}
                 </button>
               </div>
             </div>
