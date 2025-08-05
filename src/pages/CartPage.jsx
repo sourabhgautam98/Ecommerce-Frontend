@@ -20,7 +20,7 @@ const CartPage = () => {
   const total = subtotal + shipping;
 
   const handleCheckout = async () => {
-    if (isCheckingOut) return; // Prevent multiple clicks
+    if (isCheckingOut) return; 
     
     setIsCheckingOut(true);
     try {
@@ -31,7 +31,7 @@ const CartPage = () => {
         return;
       }
 
-      // Check if cart is empty
+     
       if (cartItems.length === 0) {
         alert("Your cart is empty!");
         return;
@@ -53,13 +53,11 @@ const CartPage = () => {
 
       const responses = await Promise.all(requests);
 
-      // Check if all responses are OK
       const allSuccess = responses.every((res) => res.ok);
       if (!allSuccess) {
         throw new Error("Some orders failed to process");
       }
 
-      // Clear cart only after successful order creation
       clearCart(user._id);
       navigate("/UserOrder");
     } catch (error) {
