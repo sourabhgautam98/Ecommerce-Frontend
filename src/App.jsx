@@ -20,6 +20,7 @@ function App() {
       <Navbar />
       <Routes>
         
+        <Route path="/" element={<HomePage />} />
         {/* Auth routes (only accessible when not logged in) */}
         <Route element={<AuthRoute />}>
           <Route path="/LoginPage" element={<LoginPage />} />
@@ -37,7 +38,6 @@ function App() {
         
         {/* User protected routes */}
         <Route element={<UserRoute />}>
-        <Route path="/" element={<HomePage />} />
           <Route path="/CartPage" element={<CartPage />} />
           <Route path="/UserOrder" element={<UserOrder />} />
         </Route>

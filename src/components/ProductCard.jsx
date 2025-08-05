@@ -28,7 +28,6 @@ const ProductCard = ({ product }) => {
     setTimeout(() => setIsAdding(false), 1500);
   };
 
- 
   const renderActionButton = () => {
     if (!isLoggedIn) {
       return <span className="text-sm text-gray-500">Login Now</span>;
@@ -44,7 +43,7 @@ const ProductCard = ({ product }) => {
         onClick={handleAddToCart}
         disabled={isAdding}
         className={`inline-flex items-center justify-center px-4 py-2 text-white text-sm font-medium rounded-md transition-all duration-300 min-w-[100px] ${
-          isAdding ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700'
+          isAdding ? 'bg-blue-600' : 'bg-black hover:bg-blue-600'
         } hover:scale-105`}
       >
         {isAdding ? 'Added!' : 'Add to Cart'}
@@ -53,8 +52,8 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
-      <div className="relative h-48 bg-gray-200">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 w-full h-full flex flex-col">
+      <div className="relative h-48 bg-gray-200 flex-shrink-0">
         <img
           src={imageError ? '/images/photo1.jpg' : getImageUrl(photoUrl)}
           alt={name}
@@ -66,20 +65,20 @@ const ProductCard = ({ product }) => {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 flex-grow flex flex-col">
         <h3 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-1" title={name}>
           {name}
         </h3>
        
         <div className="mb-3">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-black-500">
             <span className="font-medium">Storage:</span> {varieties}
           </p>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-auto">
           <div>
-            <p className="text-lg font-bold text-blue-600">
+            <p className="text-lg font-bold text-blue-700">
               ₹{price?.toLocaleString()}
             </p>
           </div>
