@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
+import ProductCardSkeleton from "../components/productCardSkeleton"
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -16,11 +17,9 @@ const HomePage = () => {
           `${import.meta.env.VITE_APP_BASE_URL}/products`
         );
 
-       
         if (res.data.products) {
           setProducts(res.data.products);
         } else {
-         
           setProducts(res.data);
         }
       } catch (err) {
@@ -34,7 +33,6 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
- 
   const handleRetry = () => {
     setError("");
     setLoading(true);
@@ -95,11 +93,12 @@ const HomePage = () => {
           )}
         </div>
 
-        {/* Loading State */}
+        {/* Loading State - Now with Skeletons */}
         {loading && (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700 mb-4"></div>
-            <p className="text-gray-500">Loading products...</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+            {[...Array(6)].map((_, index) => (
+              <ProductCardSkeleton key={index} />
+            ))}
           </div>
         )}
 
@@ -141,13 +140,11 @@ const HomePage = () => {
 
         {/* Products Grid */}
         {!loading && !error && products.length > 0 && (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
-              {products.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-          </>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+            {products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
         )}
       </div>
     </div>
