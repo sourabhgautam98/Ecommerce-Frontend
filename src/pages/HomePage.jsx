@@ -1,14 +1,32 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom"; // 👈 Added
 import ProductCard from "../components/ProductCard";
-import ProductCardSkeleton from "../components/productCardSkeleton"
+import ProductCardSkeleton from "../components/productCardSkeleton";
+import Popup from "../components/Popup";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+
+  const location = useLocation(); // 👈 Read navigation state
 
   useEffect(() => {
+    // ✅ Only show popup if navigated from logout
+    if (location.state?.fromLogout) {
+      setShowPopup(true);
+
+      // Auto-close after 3s
+      const timer = setTimeout(() => setShowPopup(false), 3000);
+
+      // Remove state so it doesn't show again on refresh
+      window.history.replaceState({}, document.title);
+
+      return () => clearTimeout(timer);
+    }
+
     const fetchProducts = async () => {
       try {
         setLoading(true);
@@ -31,35 +49,34 @@ const HomePage = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [location.state]); // 👈 re-run if navigation state changes
 
-  const handleRetry = () => {
+  const handleRetry = async () => {
     setError("");
     setLoading(true);
-   
-    const fetchProducts = async () => {
-      try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_APP_BASE_URL}/products`
-        );
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_APP_BASE_URL}/products`
+      );
 
-        if (res.data.products) {
-          setProducts(res.data.products);
-        } else {
-          setProducts(res.data);
-        }
-      } catch (err) {
-        console.error("❌ Failed to fetch products:", err);
-        setError(err.response?.data?.error || "Failed to load products");
-      } finally {
-        setLoading(false);
+      if (res.data.products) {
+        setProducts(res.data.products);
+      } else {
+        setProducts(res.data);
       }
-    };
-    fetchProducts();
+    } catch (err) {
+      console.error("❌ Failed to fetch products:", err);
+      setError(err.response?.data?.error || "Failed to load products");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="bg-gray-100 min-h-screen">
+      {/* ✅ Show popup only after logout */}
+      {showPopup && <Popup onClose={() => setShowPopup(false)} />}
+
       {/* Top Banner */}
       <div className="relative w-full h-64 md:h-80 lg:h-120 overflow-hidden">
         <img
@@ -68,10 +85,9 @@ const HomePage = () => {
           className="w-full h-full object-cover"
           onError={(e) => {
             e.target.style.display = "none";
-            e.target.nextSibling.style.display = "flex"; 
+            e.target.nextSibling.style.display = "flex";
           }}
         />
-        {/* Fallback if image doesn't load */}
         <div className="w-full h-full bg-gradient-to-r from-blue-600 to-blue-800 hidden items-center justify-center">
           <div className="text-center text-white">
             <div className="text-6xl mb-4">📱</div>
@@ -93,7 +109,7 @@ const HomePage = () => {
           )}
         </div>
 
-        {/* Loading State - Now with Skeletons */}
+        {/* Loading State */}
         {loading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             {[...Array(6)].map((_, index) => (
