@@ -11,17 +11,13 @@ const HomePage = () => {
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
-  const location = useLocation(); // 👈 Read navigation state
+  const location = useLocation(); 
 
   useEffect(() => {
-    // ✅ Only show popup if navigated from logout
     if (location.state?.fromLogout) {
       setShowPopup(true);
-
-      // Auto-close after 3s
       const timer = setTimeout(() => setShowPopup(false), 3000);
 
-      // Remove state so it doesn't show again on refresh
       window.history.replaceState({}, document.title);
 
       return () => clearTimeout(timer);
@@ -49,7 +45,7 @@ const HomePage = () => {
     };
 
     fetchProducts();
-  }, [location.state]); // 👈 re-run if navigation state changes
+  }, [location.state]); 
 
   const handleRetry = async () => {
     setError("");
@@ -74,10 +70,8 @@ const HomePage = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      {/* ✅ Show popup only after logout */}
       {showPopup && <Popup onClose={() => setShowPopup(false)} />}
 
-      {/* Top Banner */}
       <div className="relative w-full h-64 md:h-80 lg:h-120 overflow-hidden">
         <img
           src="/images/photo1.jpg"
@@ -97,7 +91,6 @@ const HomePage = () => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Section Header */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-2 text-blue-700">
             All Mobile Phones
@@ -109,7 +102,6 @@ const HomePage = () => {
           )}
         </div>
 
-        {/* Loading State */}
         {loading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             {[...Array(6)].map((_, index) => (
@@ -118,7 +110,6 @@ const HomePage = () => {
           </div>
         )}
 
-        {/* Error State */}
         {error && !loading && (
           <div className="text-center py-12">
             <div className="text-red-500 text-6xl mb-4">⚠️</div>
@@ -135,7 +126,6 @@ const HomePage = () => {
           </div>
         )}
 
-        {/* Empty State */}
         {!loading && !error && products.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">📱</div>
@@ -153,8 +143,6 @@ const HomePage = () => {
             </button>
           </div>
         )}
-
-        {/* Products Grid */}
         {!loading && !error && products.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             {products.map((product) => (

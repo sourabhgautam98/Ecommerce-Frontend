@@ -79,18 +79,17 @@ const AdminOrder = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8 px-4">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">📦 Order Management</h1>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full md:w-auto">
-            <StatCard title="Total Orders" value={filteredOrders.length} color="blue" />
-            <StatCard title="Total Products" value={totalProducts} color="green" />
-            <StatCard title="Total Revenue" value={`₹${totalRevenue.toLocaleString()}`} color="purple" />
-          </div>
-        </div>
+<div className="bg-gray-50 min-h-screen py-8 px-4 pt-24">
+  <div className="max-w-7xl mx-auto">
+    {/* Header */}
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-800">📦 Order Management</h1>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full md:w-auto">
+        <StatCard title="Total Orders" value={filteredOrders.length} color="blue" />
+        <StatCard title="Total Products" value={totalProducts} color="green" />
+        <StatCard title="Total Revenue" value={`₹${totalRevenue.toLocaleString()}`} color="purple" />
+      </div>
+    </div>
 
         {/* Search */}
         <div className="bg-white p-4 rounded-lg shadow mb-6">

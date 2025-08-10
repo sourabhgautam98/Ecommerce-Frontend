@@ -3,23 +3,22 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const Navbar = () => {
-  const { 
-    isLoggedIn, 
-    user, 
+  const {
+    isLoggedIn,
+    user,
     isAdmin,
     isUser,
     loading: authLoading,
     error: authError,
-    logout
+    logout,
   } = useAuth();
-  
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [logoutPopup, setLogoutPopup] = useState(false); // for logout popup
+  const [logoutPopup, setLogoutPopup] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Close menu/dropdown when auth state changes
   useEffect(() => {
     setIsMenuOpen(false);
     setIsDropdownOpen(false);
@@ -32,12 +31,11 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
     setLogoutPopup(true);
-    setTimeout(() => setLogoutPopup(false), 2000); // Hide after 2 seconds
-    navigate('/LoginPage');
+    setTimeout(() => setLogoutPopup(false), 2000);
+    navigate("/LoginPage");
     closeMenu();
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -49,7 +47,6 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Loading state
   if (authLoading) {
     return (
       <nav className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
@@ -67,7 +64,6 @@ const Navbar = () => {
     );
   }
 
-  // Error state
   if (authError) {
     return (
       <div className="bg-white shadow-lg py-4 text-red-500 text-center fixed top-0 left-0 w-full z-50">
@@ -75,21 +71,22 @@ const Navbar = () => {
       </div>
     );
   }
-
-  // Active link styling
-  const navLinkClass = ({ isActive }) => 
+  const navLinkClass = ({ isActive }) =>
     `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-      isActive ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-100 hover:text-blue-600"
+      isActive
+        ? "bg-blue-600 text-white"
+        : "text-gray-700 hover:bg-blue-100 hover:text-blue-600"
     }`;
 
-  const mobileNavLinkClass = ({ isActive }) => 
+  const mobileNavLinkClass = ({ isActive }) =>
     `block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-      isActive ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-blue-100 hover:text-blue-600"
+      isActive
+        ? "bg-blue-600 text-white"
+        : "text-gray-700 hover:bg-blue-100 hover:text-blue-600"
     }`;
 
   return (
     <>
-      {/* Logout Popup */}
       {logoutPopup && (
         <div className="fixed top-16 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg z-[60]">
           Logged out successfully
@@ -99,33 +96,50 @@ const Navbar = () => {
       <nav className="bg-white shadow-lg fixed top-0 left-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center py-4">
-            {/* Logo/Brand */}
+     
             <div className="text-xl font-bold text-blue-600">
-              <NavLink to="/" onClick={closeMenu}>PhoneMart</NavLink>
+              <NavLink to="/" onClick={closeMenu}>
+                PhoneMart
+              </NavLink>
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex space-x-4 items-center">
               {isLoggedIn && isAdmin() && (
                 <>
-                  <NavLink to="/ManageProduct" className={navLinkClass}>Manage Products</NavLink>
-                  <NavLink to="/AddProduct" className={navLinkClass}>Add Product</NavLink>
-                  <NavLink to="/AdminOrder" className={navLinkClass}>All Orders</NavLink>
+                  <NavLink to="/ManageProduct" className={navLinkClass}>
+                    Manage Products
+                  </NavLink>
+                  <NavLink to="/AddProduct" className={navLinkClass}>
+                    Add Product
+                  </NavLink>
+                  <NavLink to="/AdminOrder" className={navLinkClass}>
+                    All Orders
+                  </NavLink>
                 </>
               )}
 
               {isLoggedIn && isUser() && !isAdmin() && (
                 <>
-                  <NavLink to="/" className={navLinkClass}>Home</NavLink>
-                  <NavLink to="/CartPage" className={navLinkClass}>Cart</NavLink>
-                  <NavLink to="/UserOrder" className={navLinkClass}>My Orders</NavLink>
+                  <NavLink to="/" className={navLinkClass}>
+                    Home
+                  </NavLink>
+                  <NavLink to="/CartPage" className={navLinkClass}>
+                    Cart
+                  </NavLink>
+                  <NavLink to="/UserOrder" className={navLinkClass}>
+                    My Orders
+                  </NavLink>
                 </>
               )}
 
               {!isLoggedIn ? (
-                <> 
-                  <NavLink to="/LoginPage" className={navLinkClass}>Login</NavLink>
-                  <NavLink to="/RegisterPage" className={navLinkClass}>Register</NavLink>
+                <>
+                  <NavLink to="/LoginPage" className={navLinkClass}>
+                    Login
+                  </NavLink>
+                  <NavLink to="/RegisterPage" className={navLinkClass}>
+                    Register
+                  </NavLink>
                 </>
               ) : (
                 <div className="relative" ref={dropdownRef}>
@@ -133,14 +147,21 @@ const Navbar = () => {
                     onClick={toggleDropdown}
                     className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-blue-100 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   >
-                    <span>Welcome, {user?.name }</span>
+                    <span>Welcome, {user?.name}</span>
                     <svg
-                      className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        isDropdownOpen ? "rotate-180" : ""
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
                     </svg>
                   </button>
 
@@ -190,32 +211,79 @@ const Navbar = () => {
           {isMenuOpen && (
             <div className="md:hidden border-t border-gray-200">
               <div className="px-2 pt-2 pb-3 space-y-1">
-                <NavLink to="/" onClick={closeMenu} className={mobileNavLinkClass}>Home</NavLink>
-
                 {isLoggedIn && isAdmin() && (
                   <>
-                    <NavLink to="/ManageProduct" onClick={closeMenu} className={mobileNavLinkClass}>Manage Products</NavLink>
-                    <NavLink to="/AddProduct" onClick={closeMenu} className={mobileNavLinkClass}>Add Product</NavLink>
-                    <NavLink to="/AdminOrder" onClick={closeMenu} className={mobileNavLinkClass}>Orders</NavLink>
+                    <NavLink
+                      to="/ManageProduct"
+                      onClick={closeMenu}
+                      className={mobileNavLinkClass}
+                    >
+                      Manage Products
+                    </NavLink>
+                    <NavLink
+                      to="/AddProduct"
+                      onClick={closeMenu}
+                      className={mobileNavLinkClass}
+                    >
+                      Add Product
+                    </NavLink>
+                    <NavLink
+                      to="/AdminOrder"
+                      onClick={closeMenu}
+                      className={mobileNavLinkClass}
+                    >
+                      All Orders
+                    </NavLink>
                   </>
                 )}
 
                 {isLoggedIn && isUser() && !isAdmin() && (
                   <>
-                    <NavLink to="/CartPage" onClick={closeMenu} className={mobileNavLinkClass}>Cart</NavLink>
-                    <NavLink to="/UserOrder" onClick={closeMenu} className={mobileNavLinkClass}>My Orders</NavLink>
+                    <NavLink
+                      to="/"
+                      onClick={closeMenu}
+                      className={mobileNavLinkClass}
+                    >
+                      Home
+                    </NavLink>
+                    <NavLink
+                      to="/CartPage"
+                      onClick={closeMenu}
+                      className={mobileNavLinkClass}
+                    >
+                      Cart
+                    </NavLink>
+                    <NavLink
+                      to="/UserOrder"
+                      onClick={closeMenu}
+                      className={mobileNavLinkClass}
+                    >
+                      My Orders
+                    </NavLink>
                   </>
                 )}
 
                 {!isLoggedIn ? (
                   <>
-                    <NavLink to="/LoginPage" onClick={closeMenu} className={mobileNavLinkClass}>Login</NavLink>
-                    <NavLink to="/RegisterPage" onClick={closeMenu} className={mobileNavLinkClass}>Register</NavLink>
+                    <NavLink
+                      to="/LoginPage"
+                      onClick={closeMenu}
+                      className={mobileNavLinkClass}
+                    >
+                      Login
+                    </NavLink>
+                    <NavLink
+                      to="/RegisterPage"
+                      onClick={closeMenu}
+                      className={mobileNavLinkClass}
+                    >
+                      Register
+                    </NavLink>
                   </>
                 ) : (
                   <div className="px-3 py-2 space-y-2">
                     <div className="text-sm text-gray-600 border-b border-gray-200 pb-2">
-                      <div className="font-medium">{user?.name }</div>
+                      <div className="font-medium">{user?.name}</div>
                     </div>
                     <button
                       onClick={handleLogout}

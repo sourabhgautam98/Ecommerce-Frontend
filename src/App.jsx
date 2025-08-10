@@ -19,31 +19,31 @@ function App() {
     <>
       <Navbar />
       <Routes>
-        
-        <Route path="/" element={<HomePage />} />
-        {/* Auth routes (only accessible when not logged in) */}
-        <Route element={<AuthRoute />}>
-          <Route path="/LoginPage" element={<LoginPage />} />
-          <Route path="/RegisterPage" element={<RegisterPage />} />
-          <Route path="/AdminRegister" element={<AdminRegister />} />
-        </Route>
-        
-        {/* Admin protected routes */}
-        <Route element={<AdminRoute />}>
-          <Route path="/ManageProduct" element={<ManageProduct />} />
-          <Route path="/AddProduct" element={<AddProduct />} />
-          <Route path="/edit/:id" element={<EditProductPage />} />
-          <Route path="/AdminOrder" element={<AdminOrder />} />
-        </Route>
-        
-        {/* User protected routes */}
-        <Route element={<UserRoute />}>
-          <Route path="/CartPage" element={<CartPage />} />
-          <Route path="/UserOrder" element={<UserOrder />} />
-        </Route>
-        
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+  {/* Auth routes (only accessible when not logged in) */}
+  <Route element={<AuthRoute />}>
+    <Route path="/LoginPage" element={<LoginPage />} />
+    <Route path="/RegisterPage" element={<RegisterPage />} />
+    <Route path="/AdminRegister" element={<AdminRegister />} />
+  </Route>
+
+  {/* User-only routes (excludes admin) */}
+  <Route element={<UserRoute />}>
+    <Route path="/" element={<HomePage />} /> {/* Now protected */}
+    <Route path="/HomePage" element={<HomePage />} />
+    <Route path="/CartPage" element={<CartPage />} />
+    <Route path="/UserOrder" element={<UserOrder />} />
+  </Route>
+
+  {/* Admin-only routes */}
+  <Route element={<AdminRoute />}>
+    <Route path="/ManageProduct" element={<ManageProduct />} />
+    <Route path="/AddProduct" element={<AddProduct />} />
+    <Route path="/edit/:id" element={<EditProductPage />} />
+    <Route path="/AdminOrder" element={<AdminOrder />} />
+  </Route>
+
+  <Route path="*" element={<NotFoundPage />} />
+</Routes>
     </>
   );
 }

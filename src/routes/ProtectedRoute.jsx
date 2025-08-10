@@ -12,10 +12,14 @@ export const AdminRoute = () => {
 };
 
 export const UserRoute = () => {
-  const { isLoggedIn, isUser } = useAuth();
+  const { isLoggedIn, isUser, isAdmin } = useAuth();
+  
+  if (isLoggedIn && isAdmin()) {
+    return <Navigate to="/ManageProduct" replace />; 
+  }
   
   if (!isLoggedIn || !isUser()) {
-    return <Navigate to="/LoginPage" replace />;
+    return <Navigate to="/LoginPage" replace />; 
   }
   
   return <Outlet />;
