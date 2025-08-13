@@ -11,7 +11,7 @@ import ManageProduct from "./pages/ManageProduct";
 import UserOrder from "./pages/UserOrder";
 import AdminOrder from "./pages/AdminOrder";
 import CartPage from "./pages/CartPage";
-import EditProductPage from './pages/EditProductPage';
+import EditProductPage from "./pages/EditProductPage";
 import { AdminRoute, UserRoute, AuthRoute } from "./routes/ProtectedRoute";
 
 function App() {
@@ -19,31 +19,31 @@ function App() {
     <>
       <Navbar />
       <Routes>
-  {/* Auth routes (only accessible when not logged in) */}
-  <Route element={<AuthRoute />}>
-    <Route path="/LoginPage" element={<LoginPage />} />
-    <Route path="/RegisterPage" element={<RegisterPage />} />
-    <Route path="/AdminRegister" element={<AdminRegister />} />
-  </Route>
+        {/* Public routes */}
+        <Route path="/" element={<HomePage />} />
+        {/* Auth routes (only accessible when not logged in) */}
+        <Route element={<AuthRoute />}>
+          <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="/RegisterPage" element={<RegisterPage />} />
+          <Route path="/AdminRegister" element={<AdminRegister />} />
+        </Route>
 
-  {/* User-only routes (excludes admin) */}
-  <Route element={<UserRoute />}>
-    <Route path="/" element={<HomePage />} /> {/* Now protected */}
-    <Route path="/HomePage" element={<HomePage />} />
-    <Route path="/CartPage" element={<CartPage />} />
-    <Route path="/UserOrder" element={<UserOrder />} />
-  </Route>
+        {/* User-only routes */}
+        <Route element={<UserRoute />}>
+          <Route path="/CartPage" element={<CartPage />} />
+          <Route path="/UserOrder" element={<UserOrder />} />
+        </Route>
 
-  {/* Admin-only routes */}
-  <Route element={<AdminRoute />}>
-    <Route path="/ManageProduct" element={<ManageProduct />} />
-    <Route path="/AddProduct" element={<AddProduct />} />
-    <Route path="/edit/:id" element={<EditProductPage />} />
-    <Route path="/AdminOrder" element={<AdminOrder />} />
-  </Route>
+        {/* Admin-only routes */}
+        <Route element={<AdminRoute />}>
+          <Route path="/ManageProduct" element={<ManageProduct />} />
+          <Route path="/AddProduct" element={<AddProduct />} />
+          <Route path="/edit/:id" element={<EditProductPage />} />
+          <Route path="/AdminOrder" element={<AdminOrder />} />
+        </Route>
 
-  <Route path="*" element={<NotFoundPage />} />
-</Routes>
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </>
   );
 }
